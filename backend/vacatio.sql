@@ -8,7 +8,10 @@ CREATE TABLE IF NOT EXISTS restaurants (
 
     restaurant_id serial PRIMARY KEY,
     restaurant_name VARCHAR ( 50 ) NOT NULL, -- unique?
-    restaurant_location VARCHAR ( 50 ) NOT NULL, -- foriegn key to address database? should this be used to determine proximity --- unique??
+    -- should restaurant location be a foriegn key to an address table instead?
+    -- should we use only the data from this table to determine proximity or are we using some API?
+    -- should the location be unique? 
+    restaurant_location VARCHAR ( 50 ) NOT NULL,
     language_code INTEGER REFERENCES language_code_name ( language_code )
 
 );
@@ -26,7 +29,7 @@ CREATE TABLE IF NOT EXISTS users (
     profile_picture_path VARCHAR ( 255 ) DEFAULT NULL,
     language_code INTEGER REFERENCES language_code_name ( language_code ),
     created_on TIMESTAMP NOT NULL,
-    last_login TIMESTAMP DEFAULT NULL,
+    last_login TIMESTAMP NOT NULL,
     profile_public_flag VARCHAR ( 1 ) DEFAULT 'Y'
 
 );
@@ -36,9 +39,9 @@ CREATE TABLE IF NOT EXISTS restaurant_reviews (
     review_id serial PRIMARY KEY,
     restaurant_id INTEGER REFERENCES restaurants ( restaurant_id ),
     user_id INTEGER REFERENCES users ( user_id ),
-    rating NUMERIC(4, 2) DEFAULT NULL,
+    rating NUMERIC(4, 2) DEFAULT NULL,      --https://stackoverflow.com/questions/2892705/how-do-i-model-product-ratings-in-the-database ?
     review_header VARCHAR ( 100 ) NOT NULL,
-    review_body VARCHAR ( 1000 ) NOT NULL,       --https://stackoverflow.com/questions/2892705/how-do-i-model-product-ratings-in-the-database
+    review_body VARCHAR ( 1000 ) NOT NULL,
     created_on TIMESTAMP NOT NULL,
     likes INT DEFAULT 0
 
